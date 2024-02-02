@@ -11,7 +11,7 @@ export const QuizMatch = (req: Request, res: Response) => {
     //@ts-ignore
     let gamesPoint = req.GamesPoint;
 
-    
+
 
 
     responseJSON.find((val) => {
@@ -28,6 +28,7 @@ export const QuizMatch = (req: Request, res: Response) => {
             val["Point"] = gamesPoint
         }
     })
+
 
     return res.json(responseJSON)
 }
