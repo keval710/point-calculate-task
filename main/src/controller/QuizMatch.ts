@@ -31,6 +31,7 @@ export const QuizMatch = (req: Request, res: Response) => {
 
 
     return res.json(responseJSON)
+    
 }
 
 
