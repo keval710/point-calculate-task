@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import responseJSON from "../../../data/response.json"
 
 
-export const QuizMatch = (req: Request, res: Response) => {
+export const ResController = (req: Request, res: Response) => {
 
     //@ts-ignore
     let quizPoint = req.QuizPoint;
@@ -31,7 +31,7 @@ export const QuizMatch = (req: Request, res: Response) => {
 
 
     return res.json(responseJSON)
-    
+
 }
 
 
