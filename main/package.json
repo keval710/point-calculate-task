@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc -W & nodemon ./dist/index.js",
-    "dev": "nodemon ./dist/index.js"
+    "start": "tsc -W & nodemon ./dist/index.js"
   },
   "keywords": [],
   "author": "",
