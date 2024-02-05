@@ -3,6 +3,7 @@ import responseData from "../../../data/response.json";
 import formateJSON from "../../../data/format.json";
 import quizJSON from "../../../data/quiz.json";
 import sectionJSON from "../../../data/section.json"
+import { MainObj, contentType } from "../interface/interface"
 
 export const ResController = (req: Request, res: Response) => {
 
@@ -17,16 +18,22 @@ export const ResController = (req: Request, res: Response) => {
 
         let Point: number = 0
 
-        responseData.map((data): void => {
+        responseData.map((data: MainObj | any): void => {
+
             if (data.section_type == "Quiz") {
 
                 //* stores all id of quiz section
-                //@ts-ignore
-                let id: number[] = (data.content).map((data): String => data.id);
+                let id: number[] = (data.content).map((data: contentType): number => data.id);
 
                 //* calculate points if topicId matched
                 for (let i: number = 0; i < topicId.length; i++) {
-                    quizJSON.map((data): void => {
+                    quizJSON.map((data:
+                        {
+                            id: number;
+                            title: string;
+                            topic_id: number;
+                        }): void => {
+
                         if (data.id == id[i]) {
                             if (topicId.includes(data.topic_id)) {
                                 Point += 100  //* content includes topicId
@@ -36,8 +43,14 @@ export const ResController = (req: Request, res: Response) => {
                 }
 
                 //* calculate points if formateId matched
-                for (let i = 0; i < formateId.length; i++) {
-                    formateJSON.map((data) => {
+                for (let i: number = 0; i < formateId.length; i++) {
+
+                    formateJSON.map((data:
+                        {
+                            id: number,
+                            title: string
+                        }) => {
+
                         if (data.id == formateId[i]) {
                             if (data.title == "Playing" || data.title == "Self-practicing") {
                                 Point += 10
@@ -57,11 +70,12 @@ export const ResController = (req: Request, res: Response) => {
 
         let Point: number = 0;
 
-        responseData.map((data): void => {
-            if (data.section_type == "news") {
+        responseData.map((data: MainObj | any): void => {
+
+            if (data.section_type === "news") {
 
                 //* check topicId exist
-                (data.content).map((contentData: any): void => {
+                (data.content).map((contentData: contentType): void => {
                     if (topicId.includes(contentData.topic_id)) {
                         Point += 100  //* content includes topicId
                     }
@@ -69,7 +83,12 @@ export const ResController = (req: Request, res: Response) => {
 
                 //* check formateId exist
                 for (let i: number = 0; i < formateId.length; i++) {
-                    formateJSON.map((dataFormat): void => {
+                    formateJSON.map((dataFormat:
+                        {
+                            id: number;
+                            title: string;
+                        }): void => {
+
                         if (dataFormat.id == formateId[i] && dataFormat.title === "Reading") {
                             Point += 10  //* content includes formateId and title
                         }
@@ -87,13 +106,18 @@ export const ResController = (req: Request, res: Response) => {
 
         let Point: number = 0
 
-        responseData.map((data): void => {
+        responseData.map((data: MainObj | any): void => {
 
             if (data.section_type == "games") {
 
                 //* check formateId exist
-                for (let i = 0; i < formateId.length; i++) {
-                    formateJSON.map((data): void => {
+                for (let i: number = 0; i < formateId.length; i++) {
+
+                    formateJSON.map((data: {
+                        id: number;
+                        title: string;
+                    }): void => {
+
                         if (data.id == formateId[i] && data.title == "Playing") {
                             Point += 10 //* content includes formateId and title 
                         }
@@ -111,17 +135,19 @@ export const ResController = (req: Request, res: Response) => {
 
         let arr: number[] = [];
 
-        responseData.forEach((section) => {
+        responseData.forEach((section: MainObj | any) => {
+
             let totalPoints: number = 0;
 
             //* get Flight sections
             if (section.section_type === 'Flight') {
-                const content = section.content || [];
+
+                //* stores all content obj
+                const content: contentType[] = section.content;
 
                 //* for topic_id
-                content.forEach((val): void => {
+                content.forEach((val: contentType): void => {
                     for (let i = 0; i < sectionJSON.length; i++) {
-                        // @ts-ignore
                         if (sectionJSON[i].id === val.section_id) {
                             if (topicId.includes(sectionJSON[i].topic_id)) {
                                 totalPoints += 100 //* content includes topicId
@@ -131,16 +157,16 @@ export const ResController = (req: Request, res: Response) => {
                 })
 
                 //* for format_id
-                content.forEach((flightContent): void => {
-                    //@ts-ignore
+                content.forEach((flightContent: contentType): void => {
+
                     if (formateId.includes(flightContent.format_id)) {
                         totalPoints += 10
                     }
                 });
 
                 //* for source_id
-                content.forEach((flightContent): void => {
-                    //@ts-ignore
+                content.forEach((flightContent: contentType): void => {
+
                     if (sourceId.includes(flightContent.source_id)) {
                         totalPoints += 10
                     }
@@ -163,20 +189,18 @@ export const ResController = (req: Request, res: Response) => {
 
     //* adding points in json response 
     let sectionId: number[] = [];
-    let inc = 0
+    let inc: number = 0
 
     //* shows points in res
-    responseData.forEach((val): void => {
+    responseData.forEach((val: MainObj | any): void => {
+
         if (val.section_type == "Quiz") {
-            //@ts-ignore
             val["points"] = quizPoint
         }
         else if (val.section_type == "news") {
-            //@ts-ignore
             val["points"] = newsPoint
         }
         else if (val.section_type == "games") {
-            //@ts-ignore
             val["points"] = gamesPoint
         }
         else if (val.section_type === "Flight") {
@@ -187,10 +211,10 @@ export const ResController = (req: Request, res: Response) => {
     })
 
     //* adding points to each flight section
-    responseData.forEach((sec): void => {
+    responseData.forEach((sec: MainObj | any): void => {
+
         if (sec.section_type === "Flight") {
             if (sectionId[inc] === sec.section_id) {
-                //@ts-ignore
                 sec["points"] = sectionPoint[inc]
                 inc++
             }
@@ -198,8 +222,7 @@ export const ResController = (req: Request, res: Response) => {
     })
 
     //* sort descending order
-    //@ts-ignore
-    responseData.sort((a, b) => b.points - a.points);
+    responseData.sort((a: MainObj | any, b: MainObj | any): number => b.points - a.points);
 
     //* final output JSON
     return res.json(responseData)
