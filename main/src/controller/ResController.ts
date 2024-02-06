@@ -3,7 +3,7 @@ import responseData from "../../../data/response.json";
 import formateJSON from "../../../data/format.json";
 import quizJSON from "../../../data/quiz.json";
 import sectionJSON from "../../../data/section.json"
-import { MainObj, contentType } from "../interface/interface"
+import { MainObj, contentType, gamesInterface, newsInterface, quizInterface } from "../interface/interface"
 
 export const ResController = (req: Request, res: Response) => {
 
@@ -135,7 +135,7 @@ export const ResController = (req: Request, res: Response) => {
 
         let arr: number[] = [];
 
-        responseData.forEach((section: MainObj | any) => {
+        responseData.forEach((section: MainObj) => {
 
             let totalPoints: number = 0;
 
